@@ -24,18 +24,18 @@ def task_staggering(task_file, processors):
     for i in range(processors):
         processors_list.append([])
         
-    time = [0] * processors
+    process_time = [0] * processors
 
     # for task in task_list:
     #     print(task.name, task.exec_time)
 
     for task in task_list:
-        processor_num = time.index(min(time))
+        processor_num = process_time.index(min(process_time))
         
-        start = time[processor_num]
+        start = process_time[processor_num]
         end = start + int(task.exec_time)
         
-        time[processor_num] = end
+        process_time[processor_num] = end
         
         processors_list[processor_num].append((task.name, start, end))
         
