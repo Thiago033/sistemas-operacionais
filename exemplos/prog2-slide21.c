@@ -13,6 +13,6 @@ int main(void){
     pthread_t id;
     pthread_create(&id, NULL, Funcao, NULL);
     sleep(1);
-    pthread_exit(NULL);  //o que ocorre se retirar essa linha?
+    //pthread_exit(NULL);  //o que ocorre se retirar essa linha?
     return (0);
 }
