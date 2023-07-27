@@ -2,70 +2,43 @@
 #include <stdlib.h>
 #include <pthread.h>
 
-#define MAX_SIZE 10000 
-#define MAX_THREADS 10 
+#define NUM_PHILOSOPHERS 5
+#define NUM_FOOD 5
 
-int vetor[MAX_SIZE]; 
-int vetor_size; 
-int num_threads; 
-int soma_global = 0;
-pthread_mutex_t mutex; 
+pthread_t philosophers[NUM_PHILOSOPHERS];
 
-void* somarElementos(void* arg) {
-    int thread_id = *(int*)arg;
-    int inicio = thread_id * (vetor_size / num_threads);
-    int fim = inicio + (vetor_size / num_threads);
+pthread_mutex_t hashis[NUM_PHILOSOPHERS];
 
-    if (thread_id == num_threads - 1) {
-        fim = vetor_size;
-    }
+int food = NUM_FOOD;
 
-    int soma_local = 0;
+int thread_id[NUM_PHILOSOPHERS];
 
-    for (int i = inicio; i < fim; i++) {
-        soma_local += vetor[i];
-    }
 
-    pthread_mutex_lock(&mutex);
-    soma_global += soma_local; 
-    pthread_mutex_unlock(&mutex);
+void *philosophers_func( void *args) {
+    int thread_id = *((int *)args);
 
-    pthread_exit(NULL);
+
 }
 
 int main() {
-    printf("Digite o tamanho do vetor (>= 100): ");
-    scanf("%d", &vetor_size);
 
-    printf("Digite o número de threads (>= 2 e <= 10): ");
-    scanf("%d", &num_threads);
-
-    if (vetor_size < 100 || num_threads < 2 || num_threads > MAX_THREADS) {
-        printf("Tamanho do vetor ou número de threads inválido.\n");
-        return 1;
+    // each hashi receive a mutex
+    for (int i = 0; i < NUM_PHILOSOPHERS; i++) {
+        pthread_mutex_init(&hashis[i], NULL);
     }
 
-    for (int i = 0; i < vetor_size; i++) {
-        vetor[i] = i + 1;
+    // each philosopher is a different thread
+    for (int i = 0; i < NUM_PHILOSOPHERS; i++) {
+        thread_id[i] = i;
+        pthread_create(&philosophers[i], NULL, philosophers_func, &thread_id[i]);
+
     }
 
-    pthread_mutex_init(&mutex, NULL);
-
-    pthread_t threads[MAX_THREADS];
-    int thread_ids[MAX_THREADS];
-
-    for (int i = 0; i < num_threads; i++) {
-        thread_ids[i] = i;
-        pthread_create(&threads[i], NULL, somarElementos, &thread_ids[i]);
+    for (int i = 0; i < NUM_PHILOSOPHERS; i++) {
+        pthread_join(philosophers[i], NULL);
     }
 
-    for (int i = 0; i < num_threads; i++) {
-        pthread_join(threads[i], NULL);
+    for (int i = 0; i < NUM_PHILOSOPHERS; i++) {
+        pthread_mutex_destroy(&hashis[i]);
     }
-
-    pthread_mutex_destroy(&mutex);
-
-    printf("Soma dos elementos do vetor: %d\n", soma_global);
-
-    return 0;
 }
