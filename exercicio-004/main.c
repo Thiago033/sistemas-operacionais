@@ -51,13 +51,17 @@ int main() {
 
     for (int i = 0; i < processes; i++) {
         for (int j = 0; j < processes; j++) {
+
             if (!finished[j] && is_safe(j)) {
+
                 finished[j] = true;
                 safe_sequence_found = true;
-                printf(" -> Process%d", j);
+                printf(" -> Process %d", j);
+
                 for (int k = 0; k < resources; k++) {
                     available[k] += allocated[j][k];
                 }
+                
                 break;
             }
         }
