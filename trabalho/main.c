@@ -13,7 +13,7 @@
 
 #define NUM_DOCTORS 2
 
-#define SIMULATION_TIME 60
+#define SIMULATION_TIME 4
 
 pthread_mutex_t patientsAgeMutex;
 pthread_mutex_t patientsMutex;
